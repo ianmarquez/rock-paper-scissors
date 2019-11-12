@@ -1,26 +1,59 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import Timer from './components/Timer';
+
+type GameMode = "computer" | "player";
+interface ComponentState {
+  gameMode?: GameMode;
+  score: number;
 }
 
-export default App;
+const MenuView = (props: { onGameModeSelect : (gameMode: GameMode) => void}) => {
+  return (
+    <React.Fragment>
+      <br />
+      <div className="row" style={{ marginTop: 50 }}>
+        <h2>Select Play Mode</h2>
+      </div>
+      <div className="row" style={{ marginTop: 50 }}>
+        <button onClick={() => props.onGameModeSelect("player")}>Player vs Computer</button>
+      </div>
+      <div className="row" style={{ marginTop: 50 }}>
+        <button onClick={() => props.onGameModeSelect("computer")}>Computer vs Computer</button>
+      </div>
+    </React.Fragment>
+  )
+}
+
+export default class App extends React.Component<any, ComponentState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      score: 0,
+    }
+  }
+
+  private onGameModeSelect = (gameMode: GameMode): void => {
+    this.setState({
+      gameMode
+    });
+  }
+
+  private onTimerEnd = () : void => {
+    //do something based on requirement
+    console.log('time ran out');
+  }
+
+  public render() : React.ReactFragment {
+    const { score, gameMode } = this.state;
+    return (
+      <div className="App">
+        {!gameMode && <MenuView onGameModeSelect={this.onGameModeSelect}/>}
+        {gameMode === "player" && <React.Fragment>
+          <Timer onTimerEnd={this.onTimerEnd} />  
+        </React.Fragment>}
+      </div>
+    )
+  }
+}
