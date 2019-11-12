@@ -1,0 +1,11 @@
+.hand-button {
+  width:100px;
+  height:100px;
+  flex-grow: 1;
+  margin:5px;
+}
+
+.hand-button > i { 
+  font-size: 90px;
+  color: white;
+}

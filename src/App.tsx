@@ -1,8 +1,9 @@
 import React from 'react';
 
 import './App.css';
-import Timer from './components/Timer';
-import HandAtPlay from './models/HandAtPlay';
+import ComputerHandRandomizer from './components/ComputerHandRandomizer';
+import HandAtPlay, { handName } from './models/HandAtPlay';
+import HandButton from './components/HandButton';
 
 type GameMode = "computer" | "player";
 interface ComponentState {
@@ -42,36 +43,47 @@ export default class App extends React.Component<any, ComponentState> {
     });
   }
 
-  private onTimerEnd = () : void => {
+  private onGenerate = (opponentHand: HandAtPlay) : void => {
     //do something based on requirement
-    console.log('time ran out');
+    const { selectedHand } = this.state;
+    if (selectedHand) {
+      const results = selectedHand.didWin(opponentHand);
+      console.log(results);
+    }
+    
   }
 
-  private shouldTimerStart = () : boolean => {
-    const { gameMode, selectedHand } = this.state;
-    let shouldStart = true;
-    if(gameMode) {
-      if(gameMode === "player") {
-        shouldStart = false;
-        if(selectedHand) {
-          shouldStart = true;
-        }
-      }
-    }
-    return shouldStart;
+  private onButtonClick = (hand: HandAtPlay) : void => {
+    this.setState({
+      selectedHand: hand,
+    })
   }
+
+  private renderBorder = () : React.ReactFragment => {
+    return (
+      <React.Fragment>
+        <h3 style={{ color: "black" }}>Computer</h3>
+        <hr style={{ width: "70%" }} />
+        <h3 style={{ color: "black", textTransform: "capitalize" }}>{gameMode}</h3>
+      </React.Fragment>
+    )
+  }
+
 
   public render() : React.ReactFragment {
-    const { score, gameMode } = this.state;
+    const { gameMode, selectedHand } = this.state;
     return (
       <div className="App">
         {!gameMode && <MenuView onGameModeSelect={this.onGameModeSelect}/>}
         {gameMode && <React.Fragment>
           <br/>
-          <Timer onTimerEnd={this.onTimerEnd} shouldStart={this.shouldTimerStart()}/>  
-          <h3 style={{ color: "black"}}>Computer</h3>
-          <hr style={{ width: "70%" }}/>
-          <h3 style={{ color: "black", textTransform: "capitalize"  }}>{gameMode}</h3>
+          <ComputerHandRandomizer onGenerate={this.onGenerate} selectedHand={selectedHand}/>  
+          {this.renderBorder()}
+          <div id="hand-button-container">
+            <HandButton name="rock" onClick={this.onButtonClick}/>
+            <HandButton name="paper" onClick={this.onButtonClick}/>
+            <HandButton name="scissors" onClick={this.onButtonClick}/>
+          </div>
         </React.Fragment>}
       </div>
     )

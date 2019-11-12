@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  height: 500px;
+  height: 100%;
   width: 400px;
   background-color: #4890E2;
   margin: auto;
@@ -24,6 +24,9 @@ h4 {
   width: 70%;
 }
 
+.App > .hand-button {
+  margin: auto;
+}
 .row > button {
   color: black;
   background-color: #F4A522;
@@ -31,4 +34,10 @@ h4 {
   font-size: large;
   font-weight: bold;
   padding: 10px;
+}
+
+#hand-button-container {
+  display: inline-flex;
+  width:100%;
+  margin-top:30px;
 }

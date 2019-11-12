@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Timer from './Timer';
+import ComputerHandRandomizer from './ComputerHandRandomizer';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Timer onTimerEnd={() => console.log('onEnd')} shouldStart={true}/>, div);
+  ReactDOM.render(<ComputerHandRandomizer onGenerate={() => console.log('onEnd')}/>, div);
   ReactDOM.unmountComponentAtNode(div);
 });
