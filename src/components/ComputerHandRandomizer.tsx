@@ -16,16 +16,29 @@ export default class ComputerHandRandomizer extends React.Component<Props> {
     super(props);
   }
 
+  shouldComponentUpdate(prevProps: Props) : boolean {
+    const { selectedHand } = this.props;
+    if (selectedHand) {
+      return false;
+    }
+    return true;
+  }
+
+  componentDidUpdate(prevProps: Props) : void {
+    if (this.props.selectedHand) {
+      this.props.onGenerate(this.props.selectedHand)
+    }
+  }
+
   private generateRandomHand = () : React.ReactFragment => {
-    const { onGenerate, selectedHand } = this.props; 
+    const { selectedHand } = this.props; 
     if (!selectedHand)  return <h2> Choose a hand </h2>;
     const handTypes : handName[] = ['rock', 'paper', 'scissors'];
     const getRandomInt = (max: number) : number => {
       return Math.floor(Math.random() * Math.floor(max));
     }
     const randomHand : HandAtPlay = new HandAtPlay(handTypes[getRandomInt(handTypes.length)]);
-    onGenerate(randomHand);
-    return <HandButton name={randomHand.name}/>
+    return <HandButton name={randomHand.name} active={true}/>
   }
 
   public render() : React.ReactFragment {

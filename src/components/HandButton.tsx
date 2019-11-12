@@ -5,6 +5,7 @@ import "./HandButton.css"
 interface Props {
   name: handName;
   onClick?: (hand: HandAtPlay) => void;
+  active: boolean;
 }
 
 export default class HandButton extends React.Component<Props> {
@@ -14,14 +15,24 @@ export default class HandButton extends React.Component<Props> {
     this.hand = new HandAtPlay(props.name);
   }
 
+  private renderButton = () : React.ReactFragment => {
+    const { name, active } = this.props;
+    switch(name) {
+      case "rock":
+        return <i className={`fas fa-hand-rock ${active ? "active" : null}`}></i>;
+      case "paper":
+        return <i className={`fas fa-hand-paper ${active ? "active" : null}`}></i>;
+      case "scissors":
+        return <i className={`fas fa-hand-scissors ${active ? " active" : null}`}></i>;
+    }
+  }
+
   public render() : React.ReactFragment {
-    const { name, onClick } = this.props
+    const { onClick } = this.props
     return(
       <React.Fragment>
         <div className="hand-button" onClick={() => onClick && onClick(this.hand)}>
-          {name === "rock" && <i className="far fa-hand-rock"></i>}
-          {name === "paper" && <i className="far fa-hand-paper"></i>}
-          {name === "scissors" && <i className="far fa-hand-scissors"></i>}
+          {this.renderButton()}
         </div>
       </React.Fragment>
     )

@@ -7,9 +7,10 @@ import HandButton from './components/HandButton';
 
 type GameMode = "computer" | "player";
 interface ComponentState {
+  gameIsDone: boolean;
   gameMode?: GameMode;
-  score: number;
-  selectedHand? : HandAtPlay
+  selectedHand? : HandAtPlay;
+  opponentHand? : HandAtPlay;
 }
 
 const MenuView = (props: { onGameModeSelect : (gameMode: GameMode) => void}) => {
@@ -33,7 +34,7 @@ export default class App extends React.Component<any, ComponentState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      score: 0,
+      gameIsDone: false,
     }
   }
 
@@ -47,8 +48,9 @@ export default class App extends React.Component<any, ComponentState> {
     //do something based on requirement
     const { selectedHand } = this.state;
     if (selectedHand) {
-      const results = selectedHand.didWin(opponentHand);
-      console.log(results);
+      this.setState({
+        opponentHand: opponentHand
+      });
     }
     
   }
@@ -60,6 +62,28 @@ export default class App extends React.Component<any, ComponentState> {
   }
 
   private renderBorder = () : React.ReactFragment => {
+    const { gameMode, opponentHand, selectedHand } = this.state;
+
+    if(!!opponentHand && !!selectedHand) {
+      const result: number = selectedHand.didWin(opponentHand);
+      let message: string = '';
+      switch (result) {
+        case 1:
+          message = "Draw!"
+        case 2:
+          message = "You Win!"
+        case 3:
+          message = "You Lose!"
+      }
+      return (
+        <React.Fragment>
+          <h1 style={{ textTransform: "uppercase" }}>
+            {message}
+          </h1>
+        </React.Fragment>
+      )
+    }
+
     return (
       <React.Fragment>
         <h3 style={{ color: "black" }}>Computer</h3>
@@ -74,17 +98,18 @@ export default class App extends React.Component<any, ComponentState> {
     const { gameMode, selectedHand } = this.state;
     return (
       <div className="App">
-        {!gameMode && <MenuView onGameModeSelect={this.onGameModeSelect}/>}
-        {gameMode && <React.Fragment>
+        {gameMode ? <React.Fragment>
           <br/>
           <ComputerHandRandomizer onGenerate={this.onGenerate} selectedHand={selectedHand}/>  
           {this.renderBorder()}
           <div id="hand-button-container">
-            <HandButton name="rock" onClick={this.onButtonClick}/>
-            <HandButton name="paper" onClick={this.onButtonClick}/>
-            <HandButton name="scissors" onClick={this.onButtonClick}/>
+            <HandButton name="rock" onClick={this.onButtonClick} active={!!selectedHand && selectedHand.name === "rock"}/>
+            <HandButton name="paper" onClick={this.onButtonClick} active={!!selectedHand && selectedHand.name === "paper"}/>
+            <HandButton name="scissors" onClick={this.onButtonClick} active={!!selectedHand && selectedHand.name === "scissors"}/>
           </div>
-        </React.Fragment>}
+        </React.Fragment> 
+        :
+          <MenuView onGameModeSelect={this.onGameModeSelect} /> }
       </div>
     )
   }

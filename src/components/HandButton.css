@@ -7,5 +7,17 @@
 
 .hand-button > i { 
   font-size: 90px;
+  color: #d3d3d3;
+}
+
+.hand-button > i:hover { 
   color: white;
+}
+
+.hand-button > i.active {
+  color: white;
+}
+
+.fa-hand-scissors {
+  transform: rotate(90deg);
 }
