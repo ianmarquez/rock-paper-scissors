@@ -3,6 +3,7 @@ import "./Timer.css"
 
 interface Props {
   onTimerEnd: () => void;
+  shouldStart: boolean;
 }
 
 interface State {
@@ -38,8 +39,17 @@ export default class Timer extends React.Component<Props, State> {
     }, 1000);
   }
 
+  public componentDidUpdate(prevProps: Props) : void {
+    if(prevProps.shouldStart !== this.props.shouldStart && this.props.shouldStart) {
+      this.startTimer();
+    }
+  }
+
   public componentDidMount() : void {
-    this.startTimer();
+    const { shouldStart } = this.props;
+    if(shouldStart) {
+      this.startTimer();
+    }
   }
 
   public render() : React.ReactFragment {

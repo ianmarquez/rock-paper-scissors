@@ -2,11 +2,13 @@ import React from 'react';
 
 import './App.css';
 import Timer from './components/Timer';
+import HandAtPlay from './models/HandAtPlay';
 
 type GameMode = "computer" | "player";
 interface ComponentState {
   gameMode?: GameMode;
   score: number;
+  selectedHand? : HandAtPlay
 }
 
 const MenuView = (props: { onGameModeSelect : (gameMode: GameMode) => void}) => {
@@ -45,13 +47,31 @@ export default class App extends React.Component<any, ComponentState> {
     console.log('time ran out');
   }
 
+  private shouldTimerStart = () : boolean => {
+    const { gameMode, selectedHand } = this.state;
+    let shouldStart = true;
+    if(gameMode) {
+      if(gameMode === "player") {
+        shouldStart = false;
+        if(selectedHand) {
+          shouldStart = true;
+        }
+      }
+    }
+    return shouldStart;
+  }
+
   public render() : React.ReactFragment {
     const { score, gameMode } = this.state;
     return (
       <div className="App">
         {!gameMode && <MenuView onGameModeSelect={this.onGameModeSelect}/>}
-        {gameMode === "player" && <React.Fragment>
-          <Timer onTimerEnd={this.onTimerEnd} />  
+        {gameMode && <React.Fragment>
+          <br/>
+          <Timer onTimerEnd={this.onTimerEnd} shouldStart={this.shouldTimerStart()}/>  
+          <h3 style={{ color: "black"}}>Computer</h3>
+          <hr style={{ width: "70%" }}/>
+          <h3 style={{ color: "black", textTransform: "capitalize"  }}>{gameMode}</h3>
         </React.Fragment>}
       </div>
     )
