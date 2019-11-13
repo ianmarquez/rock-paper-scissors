@@ -27,13 +27,22 @@ h4 {
 .App > .hand-button {
   margin: auto;
 }
-.row > button {
+
+button {
   color: black;
   background-color: #F4A522;
   border: 0px;
   font-size: large;
   font-weight: bold;
   padding: 10px;
+}
+
+#menu-button-container {
+  margin-top: 20px;
+}
+
+#menu-button-container > button {
+  margin: 10px
 }
 
 #hand-button-container {

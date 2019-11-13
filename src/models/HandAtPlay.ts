@@ -21,6 +21,18 @@ export default class HandAtPlay {
     }
   }
 
+  public getWinningText(result: number) : string {
+    switch (result) {
+      case 1:
+        return "Draw!"
+      case 2:
+        return "You Win!"
+      case 3:
+      default:
+        return "You Lose!"
+    }
+  }
+
   public isEqual(opponentHand: HandAtPlay) : boolean {
     return this.name === opponentHand.name;
   }

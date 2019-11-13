@@ -70,3 +70,24 @@ it('scissors loses against rock', () => {
 
   expect(yourHand.didWin(opponentHand)).toBe(3);
 });
+
+it('when result is 1 then string is "Draw"', () => {
+  const hand = new HandAtPlay("rock");
+  const string : string = hand.getWinningText(1);
+
+  expect(string).toBe("Draw!");
+});
+
+it('when result is 2 then string is "Draw"', () => {
+  const hand = new HandAtPlay("rock");
+  const string: string = hand.getWinningText(2);
+
+  expect(string).toBe("You Win!");
+});
+
+it('when result is 3 then string is "Draw"', () => {
+  const hand = new HandAtPlay("rock");
+  const string: string = hand.getWinningText(3);
+
+  expect(string).toBe("You Lose!");
+});
